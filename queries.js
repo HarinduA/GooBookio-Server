@@ -26,19 +26,49 @@ const authLink = new ApolloLink((operation, forward) => {
 const apolloClient = new ApolloClient({
     link: concat(authLink, httpLink),
     cache: new InMemoryCache(),
-})
+});
+
+const jobDetailFragment = gql`
+    fragment JobDetail on Job {
+        id
+        date
+        title
+        company{
+            id
+            name
+        }
+        description
+    }
+`;
+
+const JobByIdQuery = gql`
+        query JobById($id: ID!) {
+            job(id: $id) {
+               ...JobDetail
+            }
+        }
+        ${jobDetailFragment}  #expression 
+    `;
 
 export async function createJob({ title, description }) {
     const mutation = gql`
         mutation createJob($input: createJobInput!) {
             job: createJob(input: $input) {
-                id
+                ...JobDetail
             }
         }
+        ${jobDetailFragment}
     `;
     const { data } = await apolloClient.mutate({
         mutation,
         variables: {input: {title, description}},
+        update: (cache, { data }) =>{
+            cache.writeQuery({
+                query:JobByIdQuery,
+                variables: {id: data.job.id},
+                data,
+            })
+        },
     });
     return data.job;
 }
@@ -67,22 +97,9 @@ export async function getCompany(id) {
 
 
 export async function getJob(id) {
-    const query = gql`
-        query JobById($id: ID!) {
-            job(id: $id) {
-                id
-                date
-                title
-                company {
-                    id
-                    name
-                }
-                description
-            }
-        }
-    `;
+    
     const { data } = await apolloClient.query({
-        query,
+        query: JobByIdQuery,
         variables: { id },
     })
     return data.job;
@@ -102,6 +119,9 @@ export async function getJobs() {
             }
         }
     `;
-    const { data } = await apolloClient.query({ query });
+    const { data } = await apolloClient.query({ 
+        query,
+        fetchPolicy: 'network-only',
+     });
     return data.jobs;
 }

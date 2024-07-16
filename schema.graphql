@@ -3,14 +3,15 @@ type Query {
     job(id: ID!): Job
     jobs: [Job!]
 }
-""" This is JOB"""
 
+""" This is JOB"""
 type Mutation {
-    login: (email: String! , password: String!): String
+    login(email: String!, password: String!): String
     createJob(input: createJobInput!): Job # CRUD Create
-    deleteJob(id: ID!):Job # CRUD Delete 
+    deleteJob(id: ID!): Job # CRUD Delete 
     updateJob(input: updateJobInput!): Job
 }
+
 type Company {
     id: ID!
     name: String!

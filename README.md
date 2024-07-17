@@ -4,6 +4,8 @@ This program uses Apollo Server with Express, along with GraphQL-Request and Apo
 
 I added authLinks and Apollo Client cache to this project. I also incorporated some Apollo Server mutations, Fetch Policies, Cache Manipulations and Fragments.
 
+I added Query Hooks for this code to cache network caches 
+
 
 
 

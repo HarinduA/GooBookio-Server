@@ -23,7 +23,7 @@ const authLink = new ApolloLink((operation, forward) => {
      }
     return forward(operation);
 })
-const apolloClient = new ApolloClient({
+export const apolloClient = new ApolloClient({
     link: concat(authLink, httpLink),
     cache: new InMemoryCache(),
 });
@@ -41,15 +41,43 @@ const jobDetailFragment = gql`
     }
 `;
 
-const JobByIdQuery = gql`
-        query JobById($id: ID!) {
-            job(id: $id) {
-               ...JobDetail
+export const companyByIdQuery = gql` #useQueryHOOK in React
+        query companyById($id: ID!) {
+            company(id: $id) {
+                id
+                name
+                description
+                jobs {
+                    id
+                    date
+                    title
+                }
             }
         }
-        ${jobDetailFragment}  #expression 
     `;
 
+export const jobByIdQuery = gql`
+    query JobById($id: ID!) {
+        job(id: $id) {
+            ...JobDetail
+        }
+    }
+    ${jobDetailFragment}  #expression 
+`;
+
+export const jobsQuery = gql`
+  query jobs {
+    jobs {
+      id
+      title
+      description
+      company {
+        id
+        name
+      }
+    }
+  }
+`;
 export async function createJob({ title, description }) {
     const mutation = gql`
         mutation createJob($input: createJobInput!) {
@@ -64,7 +92,7 @@ export async function createJob({ title, description }) {
         variables: {input: {title, description}},
         update: (cache, { data }) =>{
             cache.writeQuery({
-                query:JobByIdQuery,
+                query:jobByIdQuery,
                 variables: {id: data.job.id},
                 data,
             })
@@ -99,7 +127,7 @@ export async function getCompany(id) {
 export async function getJob(id) {
     
     const { data } = await apolloClient.query({
-        query: JobByIdQuery,
+        query: jobByIdQuery,
         variables: { id },
     })
     return data.job;

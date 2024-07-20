@@ -1,23 +1,48 @@
-import { expressjwt } from 'express-jwt';
-import jwt from 'jsonwebtoken';
-import { getUserByEmail } from './db/users.js';
+// Disclaimer: This example keeps the access token in LocalStorage just because
+// it's simpler, but in a real application you may want to use cookies instead
+// for better security. Also, it doesn't handle token expiration.
+import { jwtDecode } from 'jwt-decode';
 
-const secret = Buffer.from('Zn8Q5tyZ/G1MHltc4F/gTkVJMlrbKiZt', 'base64');
+const API_URL = 'http://localhost:9000';
 
-export const authMiddleware = expressjwt({
-  algorithms: ['HS256'],
-  credentialsRequired: false,
-  secret,
-});
+const ACCESS_TOKEN_KEY = 'accessToken';
 
-export async function handleLogin(req, res) {
-  const { email, password } = req.body;
-  const user = await getUserByEmail(email);
-  if (!user || user.password !== password) {
-    res.sendStatus(401);
-  } else {
-    const claims = { sub: user.id, email: user.email };
-    const token = jwt.sign(claims, secret);
-    res.json({ token });  
+export function getAccessToken() {
+  return localStorage.getItem(ACCESS_TOKEN_KEY);
+}
+
+export async function login(email, password) {
+  const response = await fetch(`${API_URL}/login`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ email, password }),
+  });
+  if (!response.ok) {
+    return null;
   }
+  const { token } = await response.json();
+  localStorage.setItem(ACCESS_TOKEN_KEY, token);
+  return getUserFromToken(token);
+}
+
+export function getUser() {
+  const token = getAccessToken();
+  if (!token) {
+    return null;
+  }
+  return getUserFromToken(token);
+}
+
+export function logout() {
+  localStorage.removeItem(ACCESS_TOKEN_KEY);
+}
+
+function getUserFromToken(token) {
+  const claims = jwtDecode(token);
+  return {
+    id: claims.sub,
+    email: claims.email,
+  };
 }

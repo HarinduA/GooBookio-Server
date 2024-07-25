@@ -6,6 +6,8 @@ I added authLinks and Apollo Client cache to this project. I also incorporated s
 
 N + 1 Query problems fixeded in this code and batching with DataLoader.
 
+You can install DataLoader using this code = * npm install dataloader *
+
 
 
 

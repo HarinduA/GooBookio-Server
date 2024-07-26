@@ -1,40 +1,43 @@
 type Query {
-    company(id: ID!): Company 
-    job(id: ID!): Job
-    jobs: [Job!]
+  company(id: ID!): Company
+  job(id: ID!): Job
+  jobs(limit: Int, offset: Int): JobSubList
 }
 
-""" This is JOB"""
 type Mutation {
-    login(email: String!, password: String!): String
-    createJob(input: createJobInput!): Job # CRUD Create
-    deleteJob(id: ID!): Job # CRUD Delete 
-    updateJob(input: updateJobInput!): Job
+  createJob(input: CreateJobInput!): Job
+  deleteJob(id: ID!): Job
+  updateJob(input: UpdateJobInput!): Job
 }
 
 type Company {
-    id: ID!
-    name: String!
-    description: String
-    jobs: [Job!]!
+  id: ID!
+  name: String!
+  description: String
+  jobs: [Job!]!
 }
 
 type Job {
-    id: ID!
-    """ The date when the job was published, in ISO-8601. e.g. `2021-12-31`."""
-    date: String!
-    title: String!
-    company: Company!
-    description: String
+  id: ID!
+  """The __date__ when the job was published, in ISO-8601 format. E.g. `2022-12-31`."""
+  date: String!
+  title: String!
+  company: Company!
+  description: String
 }
 
-input createJobInput {
-    title: String!
-    description: String
+type JobSubList {
+  items: [Job!]!
+  totalCount: Int!
 }
 
-input updateJobInput {
-    id: ID!
-    title: String! 
-    description: String
+input CreateJobInput {
+  title: String!
+  description: String
+}
+
+input UpdateJobInput {
+  id: ID!
+  title: String!
+  description: String
 }

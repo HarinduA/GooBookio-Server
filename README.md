@@ -1,14 +1,19 @@
-# GooBook.io QL Server
+GooBook.io QL Server
 
-This program uses Apollo Server with Express, along with GraphQL-Request and Apollo Client as GraphQL clients. The application is used to demonstrate queries, mutations, custom object types, authentication, and more.
+This project leverages Apollo Server with Express and integrates GraphQL-Request and Apollo Client as GraphQL clients. It serves as a demonstration of various GraphQL features, including queries, mutations, custom object types, authentication, and more.
 
-I added authLinks and Apollo Client cache to this project. I also incorporated some Apollo Server mutations, Fetch Policies, Cache Manipulations and Fragments. I added Query Hooks for this code to cache network caches. And also added Mutation Hooks for this code. Apollo Client Autharitaions connect with QL. Client can get any informations about they want using this web page. Project released soon. 
+Key enhancements in this project include:
 
-N + 1 Query problems fixeded in this code and batching with DataLoader.
+* Authentication Links: Implemented authLinks for secure communication between the client and server.
+* Apollo Client Cache: Incorporated Apollo Client cache for efficient data management.
+* Apollo Server Mutations: Added mutations to modify server-side data.
+* Fetch Policies: Utilized fetch policies to control how data is fetched and cached.
+* Cache Manipulations: Implemented methods to manipulate and optimize the cache.
+* Fragments: Used GraphQL fragments to optimize query efficiency.
+* Query Hooks: Added hooks for managing query data and caching network responses.
+* Mutation Hooks: Integrated hooks for handling mutations with improved performance.
+* DataLoader Integration: Resolved N + 1 query problems by incorporating DataLoader for batching and caching.
+* Install DataLoader using npm install dataloader.
+* Pagination: Implemented offset-based pagination to efficiently handle large datasets.
 
-You can install DataLoader using this code = * npm install dataloader *
-
-
-
-
-
+The project is scheduled for release soon, offering clients the ability to access comprehensive information through the web page.

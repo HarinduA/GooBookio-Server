@@ -15,5 +15,6 @@ Key enhancements in this project include:
 * DataLoader Integration: Resolved N + 1 query problems by incorporating DataLoader for batching and caching.
 * Install DataLoader using npm install dataloader.
 * Pagination: Implemented offset-based pagination to efficiently handle large datasets.
+* QL WS -Client server added to this code 
 
 The project is scheduled for release soon, offering clients the ability to access comprehensive information through the web page.

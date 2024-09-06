@@ -1,17 +1,40 @@
 type Query {
-  messages: [Message!]
+    company(id: ID!): Company 
+    job(id: ID!): Job
+    jobs (limit: Int, offset: Int):  [Job!]
 }
 
+""" This is JOB"""
 type Mutation {
-  addMessage(text: String!): Message
+    login(email: String!, password: String!): String
+    createJob(input: createJobInput!): Job # CRUD Create
+    deleteJob(id: ID!): Job # CRUD Delete 
+    updateJob(input: updateJobInput!): Job
 }
 
-type Subscription {
-  messageAdded: Message
+type Company {
+    id: ID!
+    name: String!
+    description: String
+    jobs: [Job!]!
 }
 
-type Message {
-  id: ID!
-  user: String!
-  text: String!
+type Job {
+    id: ID!
+    """ The date when the job was published, in ISO-8601. e.g. `2021-12-31`."""
+    date: String!
+    title: String!
+    company: Company!
+    description: String
+}
+
+input createJobInput {
+    title: String!
+    description: String
+}
+
+input updateJobInput {
+    id: ID!
+    title: String! 
+    description: String
 }

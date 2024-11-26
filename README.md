@@ -1,4 +1,4 @@
-GooBook.io QL Server
+# GooBook.io QL Server
 
 This project leverages Apollo Server with Express and integrates GraphQL-Request and Apollo Client as GraphQL clients. It serves as a demonstration of various GraphQL features, including queries, mutations, custom object types, authentication, and more.
 
